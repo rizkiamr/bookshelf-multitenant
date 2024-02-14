@@ -11,11 +11,23 @@ func home(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello from Bookshelf"))
 }
 
+// Add a bookView handler function
+func bookView(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Display books"))
+}
+
+// Add a userView handler function
+func userView(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Display users"))
+}
+
 func main() {
 	// Use the http.NewServeMux function to initialize a new servemux, then
 	// register the home function as the handler for the "/" URL pattern.
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
+	mux.HandleFunc("/v1/books", bookView)
+	mux.HandleFunc("/v1/users", userView)
 
 	// Use the http.ListenAndServe() function to start a new web server.
 	// We pass in two parameters: The TCP network address to listen on (in this case ":8080")
