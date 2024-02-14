@@ -1,0 +1,20 @@
+version: '3.5'
+
+services:
+  api:
+    container_name: bookshelf-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: [ "./main" ]
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - bookshelf-multitenant
+    restart: always
+
+networks:
+  bookshelf-multitenant:
+    driver: bridge
