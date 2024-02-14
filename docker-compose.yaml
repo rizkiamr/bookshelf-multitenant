@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: [ "./main" ]
+    command: [ "./main", "--port=8080" ]
     expose:
       - "8080"
     ports:

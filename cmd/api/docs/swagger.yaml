@@ -43,8 +43,6 @@ paths:
       - Books
   /v1/healthz:
     get:
-      consumes:
-      - application/json
       description: Check current service's health
       produces:
       - application/json

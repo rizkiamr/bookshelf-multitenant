@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
@@ -21,6 +22,19 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 func main() {
+	// Define a new command-line flag with the name 'port', a default value of ":8080"
+	// and some short help text explaining what the flag controls. The value of the
+	// flag will be stored in the port variable at runtime
+	port := flag.String("port", "8080", "TCP port number for HTTP server")
+
+	// Importantly, we use the flag.Parse() function to parse the command-line flag.
+	// This reads in the command-line flag value and assigns it to the port variable.
+	// We need to call this *before* we use the port variable.
+	// Otherwise it will always contain the default value of ":8080".
+	// If any errors are encountered during parsing,
+	// then the application will be terminated.
+	flag.Parse()
+
 	// Use the http.NewServeMux function to initialize a new servemux, then
 	// register the home function as the handler for the "/" URL pattern.
 	mux := http.NewServeMux()
@@ -32,13 +46,22 @@ func main() {
 	mux.HandleFunc("/v1/book/create", bookCreate)
 	mux.HandleFunc("/v1/user/view", userView)
 
+	// The value returned from the flag.String() function is a pointer to the flag value,
+	// not the value itself. So we need to dereference the pointer (i.e. prefix it with * symbol)
+	// before using it. Note that we're using the log.Printf() function
+	// to interpolate the address with the log message.
+	log.Printf("Starting server on :%s", *port)
+
+	// Add colon (":") because http.ListenAndServe only accept formatted tcp address
+	*port = ":" + *port
+
 	// Use the http.ListenAndServe() function to start a new web server.
-	// We pass in two parameters: The TCP network address to listen on (in this case ":8080")
+	// We pass in two parameters: The TCP network address to listen on
+	// (in this case from "port" variable or ":8080" by default)
 	// and the servemux we just created.
 	// If http.ListenAndServe() returns an error, we use the log.Fatal() function
 	// to log the error message and exit.
 	// Note that any error returned by http.ListenAndServe is always non-nil.
-	log.Println("Starting server on :8080")
-	err := http.ListenAndServe(":8080", mux)
+	err := http.ListenAndServe(*port, mux)
 	log.Fatal(err)
 }
