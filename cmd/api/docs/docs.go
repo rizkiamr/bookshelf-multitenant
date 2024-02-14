@@ -73,9 +73,6 @@ const docTemplate = `{
         "/v1/healthz": {
             "get": {
                 "description": "Check current service's health",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],

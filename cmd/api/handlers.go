@@ -96,7 +96,6 @@ func userView(w http.ResponseWriter, r *http.Request) {
 // @Tags Miscellaneous
 // @Summary health check
 // @Description Check current service's health
-// @Accept json
 // @Produce json
 // @Success 200
 // @Router /v1/healthz [get]
