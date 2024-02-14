@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // Define a home handler function which writes a byte slice containing
@@ -25,7 +27,23 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 // Add a bookView handler function
 func bookView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display book"))
+	if r.Method != "GET" {
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Extract the value of the id parameter from the query string and
+	// try to convert it to an integer using strconv.Atoi() function.
+	// If it can't be converted to an integer, or the value is less than 1,
+	// we return 404 page not found response
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	fmt.Fprintf(w, "Display a specific snippet with ID %d", id)
 }
 
 // Add a bookCreate handler function
