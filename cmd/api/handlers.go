@@ -69,6 +69,14 @@ func userView(w http.ResponseWriter, r *http.Request) {
 }
 
 // health handler function for health check
+// Health godoc
+// @Tags health v1
+// @Summary health
+// @Description health
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /v1/healthz [get]
 func health(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		w.Header().Set("Allow", http.MethodGet)
