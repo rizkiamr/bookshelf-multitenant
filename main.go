@@ -33,11 +33,23 @@ func userView(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Display users"))
 }
 
+// health handler function for health check
+func health(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("{\"name\": \"bookshelf-api\", \"healthy\": true}"))
+}
+
+// version handler function for app version
+func version(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("{\"name\": \"bookshelf-api\", \"version\": \"0.0.1\"}"))
+}
+
 func main() {
 	// Use the http.NewServeMux function to initialize a new servemux, then
 	// register the home function as the handler for the "/" URL pattern.
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", home)
+	mux.HandleFunc("/healthz", health)
+	mux.HandleFunc("/version", version)
 	mux.HandleFunc("/v1/books", bookView)
 	mux.HandleFunc("/v1/users", userView)
 
