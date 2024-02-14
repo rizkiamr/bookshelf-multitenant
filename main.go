@@ -25,21 +25,55 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 // Add a bookView handler function
 func bookView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display books"))
+	w.Write([]byte("Display book"))
+}
+
+// Add a bookCreate handler function
+func bookCreate(w http.ResponseWriter, r *http.Request) {
+	// Use r.Method to check whether the request is using POST method or not.
+	if r.Method != "POST" {
+		// Use the Header().Set() method to add an 'Allow: POST' header
+		// to the response header map. The first parameter is the header name, and
+		// the second parameter is the header value.
+		w.Header().Set("Allow", "POST")
+
+		// If it's not, use the w.WriteHeader() method to send a 405 status code
+		// and the w.Write() method to write a "Method Not Allowed" response body.
+		// We then return from the function so that the subsequent code is not executed.
+		w.WriteHeader(405)
+		w.Write([]byte("Method Not Allowed"))
+		return
+	}
+
+	w.Write([]byte("Create a new book"))
 }
 
 // Add a userView handler function
 func userView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display users"))
+	w.Write([]byte("Display user"))
 }
 
 // health handler function for health check
 func health(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.WriteHeader(405)
+		w.Write([]byte("Method Not Allowed"))
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
 	w.Write([]byte("{\"name\": \"bookshelf-api\", \"healthy\": true}"))
 }
 
 // version handler function for app version
 func version(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.WriteHeader(405)
+		w.Write([]byte("Method Not Allowed"))
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
 	w.Write([]byte("{\"name\": \"bookshelf-api\", \"version\": \"0.0.1\"}"))
 }
 
@@ -50,8 +84,9 @@ func main() {
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/healthz", health)
 	mux.HandleFunc("/version", version)
-	mux.HandleFunc("/v1/books", bookView)
-	mux.HandleFunc("/v1/users", userView)
+	mux.HandleFunc("/v1/book/view", bookView)
+	mux.HandleFunc("/v1/book/create", bookCreate)
+	mux.HandleFunc("/v1/user/view", userView)
 
 	// Use the http.ListenAndServe() function to start a new web server.
 	// We pass in two parameters: The TCP network address to listen on (in this case ":8080")
