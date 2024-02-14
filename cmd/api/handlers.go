@@ -25,6 +25,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 // Add a bookView handler function
+// bookView godoc
+// @Tags Books
+// @Summary get book by id
+// @Description Get book by id
+// @Param	id	query	int	true	"book id"
+// @Produce json
+// @Success 200
+// @Router /v1/book/view [get]
 func bookView(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		w.Header().Set("Allow", http.MethodGet)
@@ -46,6 +54,14 @@ func bookView(w http.ResponseWriter, r *http.Request) {
 }
 
 // Add a bookCreate handler function
+// bookCreate godoc
+// @Tags Books
+// @Summary add new book
+// @Description Add new book
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /v1/book/create [post]
 func bookCreate(w http.ResponseWriter, r *http.Request) {
 	// Use r.Method to check whether the request is using POST method or not.
 	if r.Method != "POST" {
@@ -64,15 +80,22 @@ func bookCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 // Add a userView handler function
+// UserView godoc
+// @Tags Users
+// @Summary get user by id
+// @Description Get user by id
+// @Produce json
+// @Success 200
+// @Router /v1/user/view [get]
 func userView(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Display user"))
 }
 
 // health handler function for health check
 // Health godoc
-// @Tags health v1
-// @Summary health
-// @Description health
+// @Tags Miscellaneous
+// @Summary health check
+// @Description Check current service's health
 // @Accept json
 // @Produce json
 // @Success 200
@@ -89,6 +112,13 @@ func health(w http.ResponseWriter, r *http.Request) {
 }
 
 // version handler function for app version
+// Version godoc
+// @Tags Miscellaneous
+// @Summary version check
+// @Description Check current service's version
+// @Produce json
+// @Success 200
+// @Router /v1/version [get]
 func version(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		w.Header().Set("Allow", http.MethodGet)
