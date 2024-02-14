@@ -35,13 +35,11 @@ func bookCreate(w http.ResponseWriter, r *http.Request) {
 		// Use the Header().Set() method to add an 'Allow: POST' header
 		// to the response header map. The first parameter is the header name, and
 		// the second parameter is the header value.
-		w.Header().Set("Allow", "POST")
+		w.Header().Set("Allow", http.MethodPost)
 
-		// If it's not, use the w.WriteHeader() method to send a 405 status code
-		// and the w.Write() method to write a "Method Not Allowed" response body.
-		// We then return from the function so that the subsequent code is not executed.
-		w.WriteHeader(405)
-		w.Write([]byte("Method Not Allowed"))
+		// Use the http.Error() function to send a 405 status code and
+		// "Method Not Allowed" string as the response body.
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -56,25 +54,25 @@ func userView(w http.ResponseWriter, r *http.Request) {
 // health handler function for health check
 func health(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		w.WriteHeader(405)
-		w.Write([]byte("Method Not Allowed"))
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
-	w.Write([]byte("{\"name\": \"bookshelf-api\", \"healthy\": true}"))
+	w.Write([]byte(`{"name": "bookshelf-api", "healthy": true}`))
 }
 
 // version handler function for app version
 func version(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		w.WriteHeader(405)
-		w.Write([]byte("Method Not Allowed"))
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
-	w.Write([]byte("{\"name\": \"bookshelf-api\", \"version\": \"0.0.1\"}"))
+	w.Write([]byte(`{"name": "bookshelf-api", "version": "0.0.1"}`))
 }
 
 func main() {
